@@ -12,5 +12,7 @@
     <modules>
         <module>hero-rest</module>
     <module>hero-ui</module>
-  </modules>
+        <module>hero-dao-model</module>
+        <module>hero-dao-jpa</module>
+    </modules>
 </project>
