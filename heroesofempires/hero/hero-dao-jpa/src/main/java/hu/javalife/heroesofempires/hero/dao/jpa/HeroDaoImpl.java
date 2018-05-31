@@ -6,6 +6,9 @@ import java.util.List;
 import javax.enterprise.context.RequestScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 /**
  * @author user
@@ -22,12 +25,16 @@ public class HeroDaoImpl implements HeroDao{
 
     @Override
     public boolean isNameAvailable(String pName) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return em.createNamedQuery("Hero.name",Hero.class)
+                .setParameter("name", pName)
+                .getResultList().isEmpty();
     }
 
     @Override
     public Hero getByName(String pname) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return em.createNamedQuery("Hero.name",Hero.class)
+                .setParameter("name", pname)
+                .getSingleResult();
     }
 
     @Override
@@ -37,32 +44,51 @@ public class HeroDaoImpl implements HeroDao{
 
     @Override
     public Hero modify(long pId, Hero pNewData) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Hero hero = getById(pId);
+        hero.setName(pNewData.getName());
+        hero.setDescription(pNewData.getDescription());
+        return hero;
     }
 
     @Override
     public void delete(long pId) {
-        em.getTransaction().begin();
         em.remove(getById(pId));
-        em.getTransaction().commit();
     }
 
     @Override
     public Hero add(Hero pNewData) {
-        em.getTransaction().begin();
         em.persist(pNewData);
-        em.getTransaction().commit();
         return pNewData;
     }
 
     @Override
     public List<Hero> get(int pStart, int pCount, Hero pSearch, String pShortField, String pShortDirection) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        CriteriaBuilder builder = em.getCriteriaBuilder();
+        CriteriaQuery<Hero> query =  builder.createQuery(Hero.class);
+        
+        Root root = query.from(Hero.class);
+        query.select(root);
+        
+        if(pShortField != null && pShortDirection != null){
+            if("asc".equals(pShortDirection.toLowerCase()))
+                query.orderBy(builder.asc(root.get(pShortField)));
+            if("desc".equals(pShortDirection.toLowerCase()))
+                query.orderBy(builder.desc(root.get(pShortField)));
+        }
+        
+        return em.createQuery(query)
+                .setFirstResult(pStart)
+                .setMaxResults(pStart+pCount)
+                .getResultList();
     }
 
     @Override
     public long getItemCount() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        CriteriaBuilder qb = em.getCriteriaBuilder();
+        CriteriaQuery<Long> cq = qb.createQuery(Long.class);
+        cq.select(qb.count(cq.from(Hero.class)));
+        return em.createQuery(cq).getSingleResult();
+        
     }
     
 }

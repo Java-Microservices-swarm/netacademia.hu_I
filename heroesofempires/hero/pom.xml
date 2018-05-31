@@ -14,5 +14,6 @@
     <module>hero-ui</module>
         <module>hero-dao-model</module>
         <module>hero-dao-jpa</module>
+        <module>hero-service-ejb</module>
     </modules>
 </project>

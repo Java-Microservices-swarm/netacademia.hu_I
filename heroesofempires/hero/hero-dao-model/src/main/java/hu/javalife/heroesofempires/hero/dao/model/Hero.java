@@ -1,10 +1,11 @@
 package hu.javalife.heroesofempires.hero.dao.model;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 /**
@@ -12,6 +13,9 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "hero")
+@NamedQueries({
+    @NamedQuery(name = "Hero.name", query = "SELECT h FROM Hero h WHERE h.name =:name")
+})
 public class Hero {
     
     @Id
