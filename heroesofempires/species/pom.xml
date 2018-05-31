@@ -11,5 +11,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>species-rest</module>
+        <module>species-dao-model</module>
+        <module>species-dao-jpa</module>
     </modules>
 </project>

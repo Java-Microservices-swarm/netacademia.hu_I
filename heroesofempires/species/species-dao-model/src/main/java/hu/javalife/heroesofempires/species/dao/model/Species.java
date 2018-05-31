@@ -1,4 +1,4 @@
-package hu.javalife.heroesofempires.hero.dao.model;
+package hu.javalife.heroesofempires.species.dao.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,18 +11,23 @@ import javax.persistence.Table;
  * @author user
  */
 @Entity
-@Table(name = "hero")
-public class Hero {
+@Table(name = "species")
+public class Species {
     
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)
     private long id;
-    private String name; 
+           
+    private String name;
+    
+    @Column(name = "descrip", length = 50)
     private String description;
 
-    public Hero(){}
+    public Species() {
+    }
     
-    public Hero(String name, String description) {
+    
+    public Species(String name, String description) {
         this.name = name;
         this.description = description;
     }
@@ -34,9 +39,8 @@ public class Hero {
     public void setId(long id) {
         this.id = id;
     }
+       
 
-    
-    
     public String getName() {
         return name;
     }
@@ -55,8 +59,8 @@ public class Hero {
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 83 * hash + (int) (this.id ^ (this.id >>> 32));
+        int hash = 5;
+        hash = 89 * hash + (int) (this.id ^ (this.id >>> 32));
         return hash;
     }
 
@@ -71,7 +75,7 @@ public class Hero {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Hero other = (Hero) obj;
+        final Species other = (Species) obj;
         if (this.id != other.id) {
             return false;
         }
