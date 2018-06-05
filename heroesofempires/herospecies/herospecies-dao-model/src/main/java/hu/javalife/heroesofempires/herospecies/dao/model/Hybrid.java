@@ -1,8 +1,6 @@
 
 package hu.javalife.heroesofempires.herospecies.dao.model;
 
-import hu.javalife.heroesofempires.hero.dao.model.Hero;
-import hu.javalife.heroesofempires.species.dao.model.Species;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
