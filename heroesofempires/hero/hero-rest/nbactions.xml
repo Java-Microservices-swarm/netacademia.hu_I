@@ -7,6 +7,8 @@
                 <goal>wildfly-swarm:run</goal>
             </goals>
             <properties>
+                <swarm.debug.port>8787</swarm.debug.port>
+                <swarm.port.offset>1</swarm.port.offset>
                 <swarm.ds.name>hoeds</swarm.ds.name>
                 <swarm.ds.username>hoe</swarm.ds.username>
                 <swarm.ds.password>hoe</swarm.ds.password>

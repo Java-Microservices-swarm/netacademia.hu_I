@@ -28,8 +28,12 @@ public class HeroServiceImpl {
         dao.delete(pIndex);
     }    
     
-    public Hero addHero(Hero pHero) {
+    public Hero addHero(Hero pHero) throws BException {
+        if(dao.isNameAvailable(pHero.getName())){
             return dao.add(pHero);
+        }
+        throw new BException(3,pHero,"nev mar hasznalatban van");
+            
     }    
     
 public List<Hero> getPage(

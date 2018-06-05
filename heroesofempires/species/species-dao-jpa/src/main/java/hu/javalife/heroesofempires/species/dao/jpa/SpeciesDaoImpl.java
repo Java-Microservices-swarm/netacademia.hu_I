@@ -6,14 +6,19 @@ import java.util.List;
 import javax.enterprise.context.RequestScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
+import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 /**
  * @author user
  */
 @RequestScoped
-public class SpeciesDaoImpl implements SpeciesDao{
-    
-    private EntityManager em = Persistence.createEntityManagerFactory("SpeciesPU").createEntityManager();
+public class SpeciesDaoImpl implements SpeciesDao {
+
+    @PersistenceContext(name = "SpeciesPU")
+    private EntityManager em;
 
     @Override
     public Species getById(long pId) {
@@ -22,12 +27,12 @@ public class SpeciesDaoImpl implements SpeciesDao{
 
     @Override
     public boolean isNameAvailable(String pName) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return em.createNamedQuery("Species.name").setParameter("name", pName).getResultList().isEmpty();
     }
 
     @Override
     public Species getByName(String pname) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return (Species) em.createNamedQuery("Species.name").setParameter("name", pname).getSingleResult();
     }
 
     @Override
@@ -37,32 +42,53 @@ public class SpeciesDaoImpl implements SpeciesDao{
 
     @Override
     public Species modify(long pId, Species pNewData) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Species tmp = getById(pId);
+        tmp.setName(pNewData.getName());
+        tmp.setDescription(pNewData.getDescription());
+        em.merge(tmp);
+        return tmp;
     }
 
     @Override
     public void delete(long pId) {
-        em.getTransaction().begin();
         em.remove(getById(pId));
-        em.getTransaction().commit();
     }
 
     @Override
     public Species add(Species pNewData) {
-        em.getTransaction().begin();
         em.persist(pNewData);
-        em.getTransaction().commit();
         return pNewData;
     }
 
     @Override
     public List<Species> get(int pStart, int pCount, Species pSearch, String pShortField, String pShortDirection) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        CriteriaBuilder builder = em.getCriteriaBuilder();
+        CriteriaQuery<Species> query = builder.createQuery(Species.class);
+
+        Root root = query.from(Species.class);
+        query.select(root);
+
+        if (pShortField != null && pShortDirection != null) {
+            if ("asc".equals(pShortDirection.toLowerCase())) {
+                query.orderBy(builder.asc(root.get(pShortField)));
+            }
+            if ("desc".equals(pShortDirection.toLowerCase())) {
+                query.orderBy(builder.desc(root.get(pShortField)));
+            }
+        }
+
+        return em.createQuery(query)
+                .setFirstResult(pStart)
+                .setMaxResults(pStart + pCount)
+                .getResultList();
     }
 
     @Override
     public long getItemCount() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        CriteriaBuilder qb = em.getCriteriaBuilder();
+        CriteriaQuery<Long> cq = qb.createQuery(Long.class);
+        cq.select(qb.count(cq.from(Species.class)));
+        return em.createQuery(cq).getSingleResult();
     }
-    
+
 }

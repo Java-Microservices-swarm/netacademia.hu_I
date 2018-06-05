@@ -1,13 +1,11 @@
 package hu.javalife.heroesofempires.species.rest;
 
 import hu.javalife.heroesofempires.species.dao.model.Species;
-import hu.javalife.heroesofempires.species.dao.model.SpeciesDao;
+import hu.javalife.heroesofempires.species.service.ejb.SpeciesServiceImpl;
 import io.swagger.annotations.Api;
-import java.util.ArrayList;
 import java.util.List;
-import javax.enterprise.context.ApplicationScoped;
+import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
@@ -27,22 +25,22 @@ import javax.ws.rs.core.Response;
 @Api(value = "fajok kezelése")
 public class SpeciesResource {
     
-    @Inject
-    private SpeciesDao dao;
+    @EJB
+    private SpeciesServiceImpl service;
     
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Species> getAll(){return dao.getAll();}
+    public List<Species> getAll(){return service.getAll();}
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{id}")
-    public Species getOne(@PathParam("id") int pIndex){return dao.getById(pIndex);}
+    public Species getOne(@PathParam("id") int pIndex){return getOne(pIndex);}
     
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{id}")
-    public void delete(@PathParam("id") int pIndex){dao.delete(pIndex);}
+    public void delete(@PathParam("id") int pIndex){service.doDelete(pIndex);}
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
@@ -52,8 +50,10 @@ public class SpeciesResource {
             @FormParam("desc") String pDesc
     ){
         
-        Species newInstance = new Species(pName, pDesc);
-        return Response.ok(dao.add(newInstance)).build();
+        Species newInstance = new Species();
+        newInstance.setName(pName);
+        newInstance.setDescription(pDesc);
+        return Response.ok(service.add(newInstance)).build();
     }
     
 }

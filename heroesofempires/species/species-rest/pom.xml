@@ -51,7 +51,7 @@
         <!-- Java EE 7 dependency -->
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>species-dao-jpa</artifactId>
+            <artifactId>species-service-ejb</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
@@ -73,6 +73,10 @@
             <groupId>org.wildfly.swarm</groupId>
             <artifactId>jpa-eclipselink</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.wildfly.swarm</groupId>
+            <artifactId>ejb</artifactId>
+        </dependency>        
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>

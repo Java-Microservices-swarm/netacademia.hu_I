@@ -1,6 +1,7 @@
 package hu.javalife.heroesofempires.hero.rest;
 
 import hu.javalife.heroesofempires.hero.dao.model.Hero;
+import hu.javalife.heroesofempires.hero.service.ejb.BException;
 import hu.javalife.heroesofempires.hero.service.ejb.HeroServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -78,8 +79,11 @@ public class HeroResource {
             @ApiParam(value = "name of hero", required = true) @FormParam("name") String pName,
             @ApiParam(value = "description of hero", required = true) @FormParam("desc") String pDesc) {
         
-            Hero newHero = new Hero(pName, pDesc);        
+            Hero newHero = new Hero(pName, pDesc); 
+            try{
             return Response.ok(service.addHero(newHero)).build();
+            }
+            catch(BException e){return Response.status(400).entity(newHero).build();}
     }
 
 }

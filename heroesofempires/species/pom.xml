@@ -13,5 +13,6 @@
         <module>species-rest</module>
         <module>species-dao-model</module>
         <module>species-dao-jpa</module>
+        <module>species-service-ejb</module>
     </modules>
 </project>

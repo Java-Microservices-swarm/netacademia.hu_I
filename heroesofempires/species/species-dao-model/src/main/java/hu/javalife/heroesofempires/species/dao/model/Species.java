@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 /**
@@ -12,6 +14,9 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "species")
+@NamedQueries({
+    @NamedQuery(name = "Species.name", query = "SELECT s FROM Species s WHERE s.name=:name")
+})
 public class Species {
     
     @Id

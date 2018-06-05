@@ -6,6 +6,7 @@ import java.util.List;
 import javax.enterprise.context.RequestScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
+import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -16,7 +17,8 @@ import javax.persistence.criteria.Root;
 @RequestScoped
 public class HeroDaoImpl implements HeroDao{
     
-    private EntityManager em = Persistence.createEntityManagerFactory("HeroPU").createEntityManager();
+    @PersistenceContext(name = "HeroPU")
+    private EntityManager em ;
 
     @Override
     public Hero getById(long pId) {
