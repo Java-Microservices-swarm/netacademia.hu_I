@@ -35,7 +35,7 @@ public class SpeciesResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{id}")
-    public Species getOne(@PathParam("id") int pIndex){return getOne(pIndex);}
+    public Species getOne(@PathParam("id") int pIndex){return service.getSpecies(pIndex);}
     
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)

@@ -14,4 +14,11 @@
                 <swarm.ds.connection.url>jdbc:mysql://localhost:3306/hoe?useSSL=false</swarm.ds.connection.url>
             </properties>
         </action>
+        <action>
+            <actionName>CUSTOM-docker</actionName>
+            <displayName>docker</displayName>
+            <goals>
+                <goal>docker:build</goal>
+            </goals>
+        </action>
     </actions>
