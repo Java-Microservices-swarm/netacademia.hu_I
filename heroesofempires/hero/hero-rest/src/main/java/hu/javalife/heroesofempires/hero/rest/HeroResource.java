@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import java.util.List;
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -20,7 +21,9 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.SecurityContext;
 
 @Path("/hero")
 @Api(value = "/hero", consumes = "application/json")
@@ -53,8 +56,9 @@ public class HeroResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response doGet() {
-      
+    @RolesAllowed("manage-account")
+    public Response doGet(@Context SecurityContext sc) {
+        sc.getUserPrincipal().getName();
         return Response.ok(  service.getAll()).build();
     }
 

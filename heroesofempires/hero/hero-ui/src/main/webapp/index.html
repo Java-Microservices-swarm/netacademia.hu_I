@@ -6,19 +6,57 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script>
-            function reqListener() {
-                console.log(this.response);
-            }
+            
+            
+            
+            
+            
+            
+            var token;
+            var tokenType;
+            function reqTokenListener () {
+                        token = this.response["access_token"];             
+                        tokenType = this.response["token_type"];       
+console.log("TOKEN:"+token);      
+           }            
+            
+            
+            
+function get(name){
+   if(name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search))
+	console.log("PARAM:"+name);	
+      return decodeURIComponent(name[1]);
+}            
+ 
+function getToken(){
+           var oReq = new XMLHttpRequest();
+           oReq.addEventListener("load", reqTokenListener);
+           oReq.open("POST", "http://localhost:8080/auth/realms/netacademia/protocol/openid-connect/token");
+           oReq.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+           oReq.responseType="json";
+           var data = "redirect_uri=http://localhost:8084/hero-ui/index.html&grant_type=authorization_code&client_id=account&code=" + get("code") + "";
+    oReq.send(data);   
+}           
 
-            function req() {
-                var oReq = new XMLHttpRequest();
-                oReq.addEventListener("load", reqListener);
-                oReq.open("GET", "http://localhost:8080/hero/");
-                oReq.send();
-            }
+
+
+ function req(){
+                   var oReq = new XMLHttpRequest();
+                   oReq.addEventListener("load", fuggveny);
+                   oReq.open("GET", "http://localhost:8081/hero");
+                   oReq.setRequestHeader("Authorization", "Bearer " + token);           
+                   oReq.responseType="json";  
+                 //  oReq.setRequestHeader("Content-type","multipart/form-data");
+                    oReq.send();   
+        }
+
+        function fuggveny () {
+            console.log("HERO:"+this.response);
+        }
         </script>
     </head>
     <body>
+        <button onclick="getToken()">TOKEN</button>
         <button onclick="req()">GET</button>
         Add:
         <form method="post" action="http://localhost:8080/hero/" >
